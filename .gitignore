@@ -362,6 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-!Builds/
-Builds/*.xml
-Builds/*.pdb
+!Build/
+Build/*.xml
+Build/*.pdb
