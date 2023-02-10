@@ -39,7 +39,7 @@ namespace LaunchGame
             enableCinematicTools.Enabled = SettingsManager.GetString("META_GameVersion") == "STEAM" && File.Exists(cinematicToolDLL);
 
             enableRuntimeUtils.Checked = SettingsManager.GetBool("OPT_Runtime_Utils");
-            enableRuntimeUtils.Enabled = SettingsManager.GetString("META_GameVersion") == "STEAM" && File.Exists(utilPath);
+            enableRuntimeUtils.Enabled = SettingsManager.GetString("META_GameVersion") == "STEAM" && Directory.Exists(utilPath);
 
             enableUIPerf.Checked = SettingsManager.GetBool("OPT_cUIEnabled_UIPerf");
             enableUIPerf.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
