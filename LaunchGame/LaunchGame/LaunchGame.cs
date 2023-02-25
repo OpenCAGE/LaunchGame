@@ -33,7 +33,7 @@ namespace LaunchGame
             InitializeComponent();
 
             cinematicToolDLL = SettingsManager.GetString("PATH_GameRoot") + "/DATA/MODTOOLS/REMOTE_ASSETS/cinematictools/CT_AlienIsolation.dll";
-            utilPath = SettingsManager.GetString("PATH_GameRoot") + "/DATA/MODTOOLS/REMOTE_ASSETS/runtimeutils/";
+            utilPath = SettingsManager.GetString("PATH_GameRoot") + "/DATA/MODTOOLS/REMOTE_ASSETS/runtimeutils";
 
             enableCinematicTools.Checked = SettingsManager.GetBool("OPT_CinematicTools");
             enableCinematicTools.Enabled = SettingsManager.GetString("META_GameVersion") == "STEAM" && File.Exists(cinematicToolDLL);
@@ -100,8 +100,8 @@ namespace LaunchGame
             {
                 try
                 {
-                    File.Copy(utilPath + "OpenCAGE_Utils.asi", rtUtilASI, true);
-                    File.Copy(utilPath + "winmm.dll", rtUtilDLL, true);
+                    File.Copy(utilPath + "/OpenCAGE_Utils.asi", rtUtilASI, true);
+                    File.Copy(utilPath + "/winmm.dll", rtUtilDLL, true);
                 }
                 catch
                 {
