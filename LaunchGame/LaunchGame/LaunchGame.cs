@@ -127,8 +127,16 @@ namespace LaunchGame
             if (SettingsManager.GetBool("OPT_CinematicTools"))
             {
                 if (cinematicToolInjectTask != null) cinematicToolInjectTask.Dispose();
-                cinematicToolInjectTask = Task.Factory.StartNew(() => InjectCinematicTools());
+                cinematicToolInjectTask = Task.Factory.StartNew(() => InjectCinematicTools(this));
+                this.Visible = false;
             }
+            else
+            {
+                this.Close();
+            }
+        }
+        public void OnInjectComplete(bool success)
+        {
             this.Close();
         }
 
@@ -211,7 +219,7 @@ namespace LaunchGame
         }
 
         /* Inject the cinematic tools */
-        private bool InjectCinematicTools()
+        private void InjectCinematicTools(LaunchGame mainInst)
         {
             Process[] processes = null;
             while (processes == null || processes.Length == 0)
@@ -237,11 +245,11 @@ namespace LaunchGame
                 Thread.Sleep(1000);
                 CloseHandle(RemoteThreadHandle);
                 CloseHandle(alienProcess.Handle);
-                return true;
+                mainInst.OnInjectComplete(true);
             }
             catch (Exception e)
             {
-                return false;
+                mainInst.OnInjectComplete(false);
             }
         }
 

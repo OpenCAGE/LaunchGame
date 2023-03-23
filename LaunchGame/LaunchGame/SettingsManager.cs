@@ -12,10 +12,11 @@ namespace OpenCAGE
     static class SettingsManager
     {
         static JObject _jsonConfig = null;
-        static string _configPath = LaunchGame.SharedData.pathToAI + "\\OpenCAGE Settings.json";
+        static string _configPath;
 
         static SettingsManager()
         {
+            _configPath = LaunchGame.SharedData.pathToAI + "\\OpenCAGE Settings.json";
             if (!File.Exists(_configPath)) _jsonConfig = new JObject { };
             else _jsonConfig = JObject.Parse(File.ReadAllText(_configPath));
         }
