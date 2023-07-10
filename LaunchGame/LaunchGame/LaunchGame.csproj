@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <Reference Include="CathodeLib">
-      <HintPath>..\CathodeLib\CathodeLib\bin\Release\netstandard2.0\CathodeLib.dll</HintPath>
+      <HintPath>..\..\CathodeLib\CathodeLib\bin\Release\netstandard2.0\CathodeLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using CATHODE;
+using CathodeLib;
 using OpenCAGE;
 using System;
 using System.Collections.Generic;
@@ -54,15 +55,7 @@ namespace LaunchGame
 
             if (SettingsManager.GetString("OPT_LoadToMap") == "") SettingsManager.SetString("OPT_LoadToMap", "Frontend");
 
-            List<string> mapList = Directory.GetFiles(SettingsManager.GetString("PATH_GameRoot") + "/DATA/ENV/PRODUCTION/", "COMMANDS.PAK", SearchOption.AllDirectories).ToList<string>();
-            for (int i = 0; i < mapList.Count; i++)
-            {
-                string[] fileSplit = mapList[i].Split(new[] { "PRODUCTION" }, StringSplitOptions.None);
-                string mapName = fileSplit[fileSplit.Length - 1].Substring(1, fileSplit[fileSplit.Length - 1].Length - 20);
-                mapList[i] = (mapName);
-            }
-            mapList.Remove("DLC\\BSPNOSTROMO_RIPLEY_PATCH"); mapList.Remove("DLC\\BSPNOSTROMO_TWOTEAMS_PATCH");
-            levelList.Items.AddRange(mapList.ToArray());
+            levelList.Items.AddRange(Level.GetLevels(SettingsManager.GetString("PATH_GameRoot")).ToArray());
             levelList.SelectedItem = SettingsManager.GetString("OPT_LoadToMap");
             if (levelList.SelectedIndex == -1)
             {
