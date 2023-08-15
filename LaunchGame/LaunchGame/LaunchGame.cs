@@ -23,11 +23,12 @@ namespace LaunchGame
         string utilPath = "";
 
         /* On init, if we are trying to launch to a map, skip GUI */
-        public LaunchGame(string MapToLaunchTo = "")
+        public LaunchGame(string level = null, string launchDirectly = null)
         {
-            if (MapToLaunchTo != "")
+            if (level != null && launchDirectly != null)
             {
-                LaunchToMap(MapToLaunchTo);
+                LaunchToMap(level);
+                this.Close();
                 return;
             }
 
@@ -61,6 +62,10 @@ namespace LaunchGame
             {
                 if (levelList.Items.Contains("FRONTEND")) levelList.SelectedItem = "FRONTEND";
                 else levelList.SelectedIndex = 0;
+            }
+            if (level != null)
+            {
+                levelList.SelectedItem = level;
             }
             levelList.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
         }
