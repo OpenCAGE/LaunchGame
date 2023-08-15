@@ -41,8 +41,6 @@ namespace LaunchGame
                 }
             }
 
-            File.WriteAllText("out", GetArgument("pathToAI"));
-
             //Set path to AI
             if (GetArgument("pathToAI") != null)
                 SharedData.pathToAI = GetArgument("pathToAI");
