@@ -47,7 +47,7 @@ namespace LaunchGame
             enableUIPerf.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
 
             enableMemReplayLogs.Checked = SettingsManager.GetBool("OPT_Mem_Replay_Logs");
-            enableMemReplayLogs.Enabled = false; //wip
+            enableMemReplayLogs.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
 
             UIMOD_DebugCheckpoints.Checked = SettingsManager.GetBool("UIOPT_PAUSEMENU");
             UIMOD_MapName.Checked = SettingsManager.GetBool("UIOPT_LOADINGSCREEN");

@@ -12,6 +12,18 @@ using System.Xml.XPath;
 
 namespace LaunchGame
 {
+    //Function that returns 1:
+    //  Steam: 0x00ea70f0
+    //  EGS: 0x006f18e0
+    //  GOG: 0x0085d960
+
+    //Function that returns 0:
+    //  Steam: 0x00d0fb70
+    //  EGS: 0x00db7d40
+    //  GOG: 0x007ef2e0
+
+    //persistence launch arg makes data/dev/%s?
+
     public class PatchManager
     {
         /* Patch the AI binary to circumvent FILE_HASHES::verify_integrity */
@@ -58,13 +70,13 @@ namespace LaunchGame
             switch (SettingsManager.GetString("META_GameVersion"))
             {
                 case "STEAM":
-                    memReplayPatches.Add(new PatchBytes(4039327, new byte[] { 0xcd, 0x4c, 0x53 }, new byte[] { 0x6d, 0x39, 0x25 }));
+                    memReplayPatches.Add(new PatchBytes(4039327, new byte[] { 0xcd, 0x4c, 0x53 }, new byte[] { 0x4d, 0xc2, 0x6c }));
                     break;
                 case "EPIC_GAMES_STORE":
-                    memReplayPatches.Add(new PatchBytes(4109007, new byte[] { 0x6d, 0xbe, 0x5c }, new byte[] { 0xed, 0x3e, 0x19 }));
+                    memReplayPatches.Add(new PatchBytes(4109007, new byte[] { 0x6d, 0xbe, 0x5c, 0x00 }, new byte[] { 0x0d, 0x5a, 0xf0, 0xff }));
                     break;
                 case "GOG":
-                    //TODO!
+                    memReplayPatches.Add(new PatchBytes(4039167, new byte[] { 0xdd, 0x44, 0x01 }, new byte[] { 0x5d, 0x2b, 0x08 }));
                     break;
             }
             try

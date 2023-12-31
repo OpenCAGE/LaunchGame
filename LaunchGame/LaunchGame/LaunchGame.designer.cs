@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LaunchGame));
             this.OpenGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.enableRuntimeUtils = new System.Windows.Forms.CheckBox();
             this.UIMOD_DebugCheckpoints = new System.Windows.Forms.CheckBox();
             this.UIMOD_MapSelection = new System.Windows.Forms.CheckBox();
             this.UIMOD_MapName = new System.Windows.Forms.CheckBox();
@@ -42,7 +43,6 @@
             this.levelList = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.enableRuntimeUtils = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,6 +56,19 @@
             this.OpenGame.Text = "Start Alien: Isolation";
             this.OpenGame.UseVisualStyleBackColor = true;
             this.OpenGame.Click += new System.EventHandler(this.LaunchGame_Click);
+            // 
+            // enableRuntimeUtils
+            // 
+            this.enableRuntimeUtils.AutoSize = true;
+            this.enableRuntimeUtils.Enabled = false;
+            this.enableRuntimeUtils.Location = new System.Drawing.Point(191, 91);
+            this.enableRuntimeUtils.Name = "enableRuntimeUtils";
+            this.enableRuntimeUtils.Size = new System.Drawing.Size(130, 17);
+            this.enableRuntimeUtils.TabIndex = 30;
+            this.enableRuntimeUtils.Text = "Enable Hot Reloading";
+            this.toolTip1.SetToolTip(this.enableRuntimeUtils, "Press INSERT in-game to hot reload the current level.");
+            this.enableRuntimeUtils.UseVisualStyleBackColor = true;
+            this.enableRuntimeUtils.CheckedChanged += new System.EventHandler(this.enableRuntimeUtils_CheckedChanged);
             // 
             // UIMOD_DebugCheckpoints
             // 
@@ -109,6 +122,7 @@
             this.enableCinematicTools.Size = new System.Drawing.Size(137, 17);
             this.enableCinematicTools.TabIndex = 27;
             this.enableCinematicTools.Text = "Enable Cinematic Tools";
+            this.toolTip1.SetToolTip(this.enableCinematicTools, "Enables HattiWatti\'s Cinematic Tools.");
             this.enableCinematicTools.UseVisualStyleBackColor = true;
             this.enableCinematicTools.CheckedChanged += new System.EventHandler(this.enableCinematicTools_CheckedChanged);
             // 
@@ -120,18 +134,19 @@
             this.enableUIPerf.Size = new System.Drawing.Size(152, 17);
             this.enableUIPerf.TabIndex = 28;
             this.enableUIPerf.Text = "Enable UI Memory Overlay";
+            this.toolTip1.SetToolTip(this.enableUIPerf, "Displays current UI memory in an in-game overlay.");
             this.enableUIPerf.UseVisualStyleBackColor = true;
             this.enableUIPerf.CheckedChanged += new System.EventHandler(this.enableUIPerf_CheckedChanged);
             // 
             // enableMemReplayLogs
             // 
             this.enableMemReplayLogs.AutoSize = true;
-            this.enableMemReplayLogs.Enabled = false;
             this.enableMemReplayLogs.Location = new System.Drawing.Point(191, 68);
             this.enableMemReplayLogs.Name = "enableMemReplayLogs";
             this.enableMemReplayLogs.Size = new System.Drawing.Size(140, 17);
             this.enableMemReplayLogs.TabIndex = 29;
             this.enableMemReplayLogs.Text = "Enable Memory Logging";
+            this.toolTip1.SetToolTip(this.enableMemReplayLogs, "Enables memory replay logs, saved to the Mem_Replay_Logs folder.");
             this.enableMemReplayLogs.UseVisualStyleBackColor = true;
             this.enableMemReplayLogs.CheckedChanged += new System.EventHandler(this.enableMemReplayLogs_CheckedChanged);
             // 
@@ -169,19 +184,6 @@
             this.label1.Size = new System.Drawing.Size(72, 13);
             this.label1.TabIndex = 32;
             this.label1.Text = "Starting Level";
-            // 
-            // enableRuntimeUtils
-            // 
-            this.enableRuntimeUtils.AutoSize = true;
-            this.enableRuntimeUtils.Enabled = false;
-            this.enableRuntimeUtils.Location = new System.Drawing.Point(191, 91);
-            this.enableRuntimeUtils.Name = "enableRuntimeUtils";
-            this.enableRuntimeUtils.Size = new System.Drawing.Size(130, 17);
-            this.enableRuntimeUtils.TabIndex = 30;
-            this.enableRuntimeUtils.Text = "Enable Hot Reloading";
-            this.toolTip1.SetToolTip(this.enableRuntimeUtils, "Press INSERT in-game to hot reload the current level.");
-            this.enableRuntimeUtils.UseVisualStyleBackColor = true;
-            this.enableRuntimeUtils.CheckedChanged += new System.EventHandler(this.enableRuntimeUtils_CheckedChanged);
             // 
             // LaunchGame
             // 
