@@ -43,6 +43,12 @@ namespace LaunchGame
             enableRuntimeUtils.Checked = SettingsManager.GetBool("OPT_Runtime_Utils");
             enableRuntimeUtils.Enabled = SettingsManager.GetString("META_GameVersion") == "STEAM" && Directory.Exists(utilPath);
 
+            disableUI.Checked = SettingsManager.GetBool("OPT_HudDisabled");
+            disableUI.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+
+            skipFrontend.Checked = SettingsManager.GetBool("OPT_SkipFE");
+            skipFrontend.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+
             enableUIPerf.Checked = SettingsManager.GetBool("OPT_cUIEnabled_UIPerf");
             enableUIPerf.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
 
@@ -164,6 +170,22 @@ namespace LaunchGame
         private void enableRuntimeUtils_CheckedChanged(object sender, EventArgs e)
         {
             SettingsManager.SetBool("OPT_Runtime_Utils", enableRuntimeUtils.Checked);
+        }
+
+        /* Enable/disable in-game HUD */
+        private void disableUI_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingsManager.SetBool("OPT_HudDisabled", disableUI.Checked);
+            if (!PatchManager.PatchNoUIFlag(disableUI.Checked))
+                MessageBox.Show("Failed to set HUD disabled option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        /* Skip Frontend (WARNING: Causes issues when returning to main menu - duh) */
+        private void skipFrontend_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingsManager.SetBool("OPT_SkipFE", skipFrontend.Checked);
+            if (!PatchManager.PatchSkipFrontendFlag(skipFrontend.Checked))
+                MessageBox.Show("Failed to set skip frontend option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /* UI Modifications */

@@ -33,23 +33,25 @@
             this.OpenGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.enableRuntimeUtils = new System.Windows.Forms.CheckBox();
+            this.enableCinematicTools = new System.Windows.Forms.CheckBox();
+            this.enableUIPerf = new System.Windows.Forms.CheckBox();
+            this.enableMemReplayLogs = new System.Windows.Forms.CheckBox();
             this.UIMOD_DebugCheckpoints = new System.Windows.Forms.CheckBox();
             this.UIMOD_MapSelection = new System.Windows.Forms.CheckBox();
             this.UIMOD_MapName = new System.Windows.Forms.CheckBox();
             this.UIMOD_ReturnFrontend = new System.Windows.Forms.CheckBox();
-            this.enableCinematicTools = new System.Windows.Forms.CheckBox();
-            this.enableUIPerf = new System.Windows.Forms.CheckBox();
-            this.enableMemReplayLogs = new System.Windows.Forms.CheckBox();
             this.levelList = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.disableUI = new System.Windows.Forms.CheckBox();
+            this.skipFrontend = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // OpenGame
             // 
             this.OpenGame.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OpenGame.Location = new System.Drawing.Point(12, 186);
+            this.OpenGame.Location = new System.Drawing.Point(12, 209);
             this.OpenGame.Name = "OpenGame";
             this.OpenGame.Size = new System.Drawing.Size(350, 44);
             this.OpenGame.TabIndex = 22;
@@ -69,6 +71,42 @@
             this.toolTip1.SetToolTip(this.enableRuntimeUtils, "Press INSERT in-game to hot reload the current level.");
             this.enableRuntimeUtils.UseVisualStyleBackColor = true;
             this.enableRuntimeUtils.CheckedChanged += new System.EventHandler(this.enableRuntimeUtils_CheckedChanged);
+            // 
+            // enableCinematicTools
+            // 
+            this.enableCinematicTools.AutoSize = true;
+            this.enableCinematicTools.Location = new System.Drawing.Point(191, 68);
+            this.enableCinematicTools.Name = "enableCinematicTools";
+            this.enableCinematicTools.Size = new System.Drawing.Size(137, 17);
+            this.enableCinematicTools.TabIndex = 27;
+            this.enableCinematicTools.Text = "Enable Cinematic Tools";
+            this.toolTip1.SetToolTip(this.enableCinematicTools, "Enables HattiWatti\'s Cinematic Tools.");
+            this.enableCinematicTools.UseVisualStyleBackColor = true;
+            this.enableCinematicTools.CheckedChanged += new System.EventHandler(this.enableCinematicTools_CheckedChanged);
+            // 
+            // enableUIPerf
+            // 
+            this.enableUIPerf.AutoSize = true;
+            this.enableUIPerf.Location = new System.Drawing.Point(191, 22);
+            this.enableUIPerf.Name = "enableUIPerf";
+            this.enableUIPerf.Size = new System.Drawing.Size(152, 17);
+            this.enableUIPerf.TabIndex = 28;
+            this.enableUIPerf.Text = "Enable UI Memory Overlay";
+            this.toolTip1.SetToolTip(this.enableUIPerf, "Displays current UI memory in an in-game overlay.");
+            this.enableUIPerf.UseVisualStyleBackColor = true;
+            this.enableUIPerf.CheckedChanged += new System.EventHandler(this.enableUIPerf_CheckedChanged);
+            // 
+            // enableMemReplayLogs
+            // 
+            this.enableMemReplayLogs.AutoSize = true;
+            this.enableMemReplayLogs.Location = new System.Drawing.Point(191, 45);
+            this.enableMemReplayLogs.Name = "enableMemReplayLogs";
+            this.enableMemReplayLogs.Size = new System.Drawing.Size(140, 17);
+            this.enableMemReplayLogs.TabIndex = 29;
+            this.enableMemReplayLogs.Text = "Enable Memory Logging";
+            this.toolTip1.SetToolTip(this.enableMemReplayLogs, "Enables memory replay logs, saved to the Mem_Replay_Logs folder.");
+            this.enableMemReplayLogs.UseVisualStyleBackColor = true;
+            this.enableMemReplayLogs.CheckedChanged += new System.EventHandler(this.enableMemReplayLogs_CheckedChanged);
             // 
             // UIMOD_DebugCheckpoints
             // 
@@ -114,42 +152,6 @@
             this.UIMOD_ReturnFrontend.UseVisualStyleBackColor = true;
             this.UIMOD_ReturnFrontend.CheckedChanged += new System.EventHandler(this.UIMOD_ReturnFrontend_CheckedChanged);
             // 
-            // enableCinematicTools
-            // 
-            this.enableCinematicTools.AutoSize = true;
-            this.enableCinematicTools.Location = new System.Drawing.Point(191, 22);
-            this.enableCinematicTools.Name = "enableCinematicTools";
-            this.enableCinematicTools.Size = new System.Drawing.Size(137, 17);
-            this.enableCinematicTools.TabIndex = 27;
-            this.enableCinematicTools.Text = "Enable Cinematic Tools";
-            this.toolTip1.SetToolTip(this.enableCinematicTools, "Enables HattiWatti\'s Cinematic Tools.");
-            this.enableCinematicTools.UseVisualStyleBackColor = true;
-            this.enableCinematicTools.CheckedChanged += new System.EventHandler(this.enableCinematicTools_CheckedChanged);
-            // 
-            // enableUIPerf
-            // 
-            this.enableUIPerf.AutoSize = true;
-            this.enableUIPerf.Location = new System.Drawing.Point(191, 45);
-            this.enableUIPerf.Name = "enableUIPerf";
-            this.enableUIPerf.Size = new System.Drawing.Size(152, 17);
-            this.enableUIPerf.TabIndex = 28;
-            this.enableUIPerf.Text = "Enable UI Memory Overlay";
-            this.toolTip1.SetToolTip(this.enableUIPerf, "Displays current UI memory in an in-game overlay.");
-            this.enableUIPerf.UseVisualStyleBackColor = true;
-            this.enableUIPerf.CheckedChanged += new System.EventHandler(this.enableUIPerf_CheckedChanged);
-            // 
-            // enableMemReplayLogs
-            // 
-            this.enableMemReplayLogs.AutoSize = true;
-            this.enableMemReplayLogs.Location = new System.Drawing.Point(191, 68);
-            this.enableMemReplayLogs.Name = "enableMemReplayLogs";
-            this.enableMemReplayLogs.Size = new System.Drawing.Size(140, 17);
-            this.enableMemReplayLogs.TabIndex = 29;
-            this.enableMemReplayLogs.Text = "Enable Memory Logging";
-            this.toolTip1.SetToolTip(this.enableMemReplayLogs, "Enables memory replay logs, saved to the Mem_Replay_Logs folder.");
-            this.enableMemReplayLogs.UseVisualStyleBackColor = true;
-            this.enableMemReplayLogs.CheckedChanged += new System.EventHandler(this.enableMemReplayLogs_CheckedChanged);
-            // 
             // levelList
             // 
             this.levelList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -161,6 +163,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.skipFrontend);
+            this.groupBox1.Controls.Add(this.disableUI);
             this.groupBox1.Controls.Add(this.enableRuntimeUtils);
             this.groupBox1.Controls.Add(this.UIMOD_DebugCheckpoints);
             this.groupBox1.Controls.Add(this.UIMOD_MapSelection);
@@ -171,7 +175,7 @@
             this.groupBox1.Controls.Add(this.enableCinematicTools);
             this.groupBox1.Location = new System.Drawing.Point(12, 61);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(350, 118);
+            this.groupBox1.Size = new System.Drawing.Size(350, 142);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Launch Options";
@@ -185,11 +189,38 @@
             this.label1.TabIndex = 32;
             this.label1.Text = "Starting Level";
             // 
+            // disableUI
+            // 
+            this.disableUI.AutoSize = true;
+            this.disableUI.Enabled = false;
+            this.disableUI.Location = new System.Drawing.Point(191, 114);
+            this.disableUI.Name = "disableUI";
+            this.disableUI.Size = new System.Drawing.Size(88, 17);
+            this.disableUI.TabIndex = 31;
+            this.disableUI.Text = "Disable HUD";
+            this.toolTip1.SetToolTip(this.disableUI, "Enabling this will disable the in-game HUD. Be aware that this also disables UI p" +
+        "opups, so may make some actions impossible.");
+            this.disableUI.UseVisualStyleBackColor = true;
+            this.disableUI.CheckedChanged += new System.EventHandler(this.disableUI_CheckedChanged);
+            // 
+            // skipFrontend
+            // 
+            this.skipFrontend.AutoSize = true;
+            this.skipFrontend.Enabled = false;
+            this.skipFrontend.Location = new System.Drawing.Point(11, 114);
+            this.skipFrontend.Name = "skipFrontend";
+            this.skipFrontend.Size = new System.Drawing.Size(92, 17);
+            this.skipFrontend.TabIndex = 32;
+            this.skipFrontend.Text = "Skip Frontend";
+            this.toolTip1.SetToolTip(this.skipFrontend, "Enabling this will skip the title screen when loading directly to a level.");
+            this.skipFrontend.UseVisualStyleBackColor = true;
+            this.skipFrontend.CheckedChanged += new System.EventHandler(this.skipFrontend_CheckedChanged);
+            // 
             // LaunchGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 241);
+            this.ClientSize = new System.Drawing.Size(374, 262);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.levelList);
@@ -221,5 +252,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox enableRuntimeUtils;
+        private System.Windows.Forms.CheckBox disableUI;
+        private System.Windows.Forms.CheckBox skipFrontend;
     }
 }

@@ -63,6 +63,79 @@ namespace LaunchGame
             }
         }
 
+        /* Patch the no_ui option in game binary */
+        public static bool PatchNoUIFlag(bool noUI)
+        {
+            List<PatchBytes> noUIPatches = new List<PatchBytes>();
+            switch (SettingsManager.GetString("META_GameVersion"))
+            {
+                case "STEAM":
+                    noUIPatches.Add(new PatchBytes(3842753, new byte[] { 0xab, 0x4c, 0x56 }, new byte[] { 0x2b, 0xc2, 0x6f }));
+                    break;
+                case "EPIC_GAMES_STORE":
+                    noUIPatches.Add(new PatchBytes(3912033, new byte[] { 0xdb, 0xbf, 0x5f, 0x00 }, new byte[] { 0x7b, 0x5b, 0xf3, 0xff }));
+                    break;
+                case "GOG":
+                    noUIPatches.Add(new PatchBytes(3842929, new byte[] { 0x6b, 0x43, 0x04 }, new byte[] { 0xeb, 0x29, 0x0b }));
+                    break;
+            }
+            try
+            {
+                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
+                for (int i = 0; i < noUIPatches.Count; i++)
+                {
+                    writer.BaseStream.Position = noUIPatches[i].offset;
+                    if (noUI) writer.Write(noUIPatches[i].patched);
+                    else writer.Write(noUIPatches[i].original);
+                }
+                writer.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("PatchManager::PatchNoUIFlag - " + e.ToString());
+                return false;
+            }
+        }
+
+        /* Patch the skip_frontend option in game binary */
+        public static bool PatchSkipFrontendFlag(bool skipFrontend)
+        {
+            List<PatchBytes> skipFEPatches = new List<PatchBytes>();
+            switch (SettingsManager.GetString("META_GameVersion"))
+            {
+                case "STEAM":
+                    skipFEPatches.Add(new PatchBytes(3842846, new byte[] { 0x4e, 0x4c, 0x56 }, new byte[] { 0xce, 0xc1, 0x6f }));
+                    skipFEPatches.Add(new PatchBytes(4047697, new byte[] { 0x1b, 0x2c, 0x53 }, new byte[] { 0x9b, 0xa1, 0x6c }));
+                    break;
+                case "EPIC_GAMES_STORE":
+                    skipFEPatches.Add(new PatchBytes(3912126, new byte[] { 0x7e, 0xbf, 0x5f, 0x00 }, new byte[] { 0x1e, 0x5b, 0xf3, 0xff })); 
+                    skipFEPatches.Add(new PatchBytes(4117408, new byte[] { 0x9c, 0x9d, 0x5c, 0x00 }, new byte[] { 0x3c, 0x39, 0xf0, 0xff })); 
+                    break;
+                case "GOG":
+                    skipFEPatches.Add(new PatchBytes(3843022, new byte[] { 0x0e, 0x43, 0x04 }, new byte[] { 0x8e, 0x29, 0x0b }));
+                    skipFEPatches.Add(new PatchBytes(4047514, new byte[] { 0x42, 0x24, 0x01 }, new byte[] { 0xc2, 0x0a, 0x08 }));
+                    break;
+            }
+            try
+            {
+                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
+                for (int i = 0; i < skipFEPatches.Count; i++)
+                {
+                    writer.BaseStream.Position = skipFEPatches[i].offset;
+                    if (skipFrontend) writer.Write(skipFEPatches[i].patched);
+                    else writer.Write(skipFEPatches[i].original);
+                }
+                writer.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("PatchManager::PatchSkipFrontendFlag - " + e.ToString());
+                return false;
+            }
+        }
+
         /* Patch the instruction to set Mem_Replay_Logs logging in game binary */
         public static bool PatchMemReplayLogFlag(bool shouldLog)
         {
@@ -141,22 +214,22 @@ namespace LaunchGame
                     benchmarkPatches.Add(new PatchBytes(3842041, new byte[] { 0xe3, 0x48, 0x26 }, new byte[] { 0x13, 0x3c, 0x28 }));
                     benchmarkPatches.Add(new PatchBytes(3842068, new byte[] { 0xce, 0x0c, 0x6f }, new byte[] { 0x26, 0x0f, 0x64 }));
                     benchmarkPatches.Add(new PatchBytes(3842146, new byte[] { 0xcb, 0x0c, 0x6f }, new byte[] { 0x26, 0x0f, 0x64 }));
-                    benchmarkPatches.Add(new PatchBytes(3842846, new byte[] { 0x4e, 0x4c, 0x56 }, new byte[] { 0xce, 0xc1, 0x6f })); //skip_frontend
-                    benchmarkPatches.Add(new PatchBytes(4047697, new byte[] { 0x1b, 0x2c, 0x53 }, new byte[] { 0x9b, 0xa1, 0x6c })); //skip_frontend
+                    //benchmarkPatches.Add(new PatchBytes(3842846, new byte[] { 0x4e, 0x4c, 0x56 }, new byte[] { 0xce, 0xc1, 0x6f })); //skip_frontend
+                    //benchmarkPatches.Add(new PatchBytes(4047697, new byte[] { 0x1b, 0x2c, 0x53 }, new byte[] { 0x9b, 0xa1, 0x6c })); //skip_frontend
                     break;
                 case "EPIC_GAMES_STORE":
                     benchmarkPatches.Add(new PatchBytes(3911321, new byte[] { 0x13, 0x5f, 0x1a }, new byte[] { 0x23, 0x43, 0x1c }));
                     benchmarkPatches.Add(new PatchBytes(3911348, new byte[] { 0xee, 0xd1, 0x70 }, new byte[] { 0xe6, 0xce, 0x65 }));
                     benchmarkPatches.Add(new PatchBytes(3911426, new byte[] { 0xeb, 0xd1, 0x70 }, new byte[] { 0xe6, 0xce, 0x65 }));
-                    benchmarkPatches.Add(new PatchBytes(3912126, new byte[] { 0x7e, 0xbf, 0x5f, 0x00 }, new byte[] { 0x1e, 0x5b, 0xf3, 0xff })); //skip_frontend
-                    benchmarkPatches.Add(new PatchBytes(4117408, new byte[] { 0x9c, 0x9d, 0x5c, 0x00 }, new byte[] { 0x3c, 0x39, 0xf0, 0xff })); //skip_frontend
+                    //benchmarkPatches.Add(new PatchBytes(3912126, new byte[] { 0x7e, 0xbf, 0x5f, 0x00 }, new byte[] { 0x1e, 0x5b, 0xf3, 0xff })); //skip_frontend
+                    //benchmarkPatches.Add(new PatchBytes(4117408, new byte[] { 0x9c, 0x9d, 0x5c, 0x00 }, new byte[] { 0x3c, 0x39, 0xf0, 0xff })); //skip_frontend
                     break;
                 case "GOG":
                     benchmarkPatches.Add(new PatchBytes(3842217, new byte[] { 0x33, 0x4b, 0x26 }, new byte[] { 0x13, 0x3c, 0x28 }));
                     benchmarkPatches.Add(new PatchBytes(3842244, new byte[] { 0x0e, 0xaf, 0x70 }, new byte[] { 0x26, 0xaf, 0x65 }));
                     benchmarkPatches.Add(new PatchBytes(3842322, new byte[] { 0x0b, 0xaf, 0x70 }, new byte[] { 0x26, 0xaf, 0x65 }));
-                    benchmarkPatches.Add(new PatchBytes(3843022, new byte[] { 0x0e, 0x43, 0x04 }, new byte[] { 0x8e, 0x29, 0x0b })); //skip_frontend
-                    benchmarkPatches.Add(new PatchBytes(4047514, new byte[] { 0x42, 0x24, 0x01 }, new byte[] { 0xc2, 0x0a, 0x08 })); //skip_frontend
+                    //benchmarkPatches.Add(new PatchBytes(3843022, new byte[] { 0x0e, 0x43, 0x04 }, new byte[] { 0x8e, 0x29, 0x0b })); //skip_frontend
+                    //benchmarkPatches.Add(new PatchBytes(4047514, new byte[] { 0x42, 0x24, 0x01 }, new byte[] { 0xc2, 0x0a, 0x08 })); //skip_frontend
                     break;
             }
 
