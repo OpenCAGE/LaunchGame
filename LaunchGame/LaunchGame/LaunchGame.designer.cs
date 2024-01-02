@@ -63,7 +63,7 @@
             // 
             this.enableRuntimeUtils.AutoSize = true;
             this.enableRuntimeUtils.Enabled = false;
-            this.enableRuntimeUtils.Location = new System.Drawing.Point(191, 91);
+            this.enableRuntimeUtils.Location = new System.Drawing.Point(191, 68);
             this.enableRuntimeUtils.Name = "enableRuntimeUtils";
             this.enableRuntimeUtils.Size = new System.Drawing.Size(130, 17);
             this.enableRuntimeUtils.TabIndex = 30;
@@ -75,7 +75,7 @@
             // enableCinematicTools
             // 
             this.enableCinematicTools.AutoSize = true;
-            this.enableCinematicTools.Location = new System.Drawing.Point(191, 68);
+            this.enableCinematicTools.Location = new System.Drawing.Point(191, 91);
             this.enableCinematicTools.Name = "enableCinematicTools";
             this.enableCinematicTools.Size = new System.Drawing.Size(137, 17);
             this.enableCinematicTools.TabIndex = 27;
@@ -195,9 +195,9 @@
             this.disableUI.Enabled = false;
             this.disableUI.Location = new System.Drawing.Point(191, 114);
             this.disableUI.Name = "disableUI";
-            this.disableUI.Size = new System.Drawing.Size(88, 17);
+            this.disableUI.Size = new System.Drawing.Size(54, 17);
             this.disableUI.TabIndex = 31;
-            this.disableUI.Text = "Disable HUD";
+            this.disableUI.Text = "No UI";
             this.toolTip1.SetToolTip(this.disableUI, "Enabling this will disable the in-game HUD. Be aware that this also disables UI p" +
         "opups, so may make some actions impossible.");
             this.disableUI.UseVisualStyleBackColor = true;
