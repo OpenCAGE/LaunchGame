@@ -80,7 +80,7 @@
             this.enableCinematicTools.Size = new System.Drawing.Size(137, 17);
             this.enableCinematicTools.TabIndex = 27;
             this.enableCinematicTools.Text = "Enable Cinematic Tools";
-            this.toolTip1.SetToolTip(this.enableCinematicTools, "Enables HattiWatti\'s Cinematic Tools.\n\nOn some systems, Cinematic Tools may fail to inject.\nAs a workaround, you may manually inject the DLL stored at DATA\\MODTOOLS\\REMOTE_ASSETS\\cinematictools\\CT_AlienIsolation.dll using your injector of choice.");
+            this.toolTip1.SetToolTip(this.enableCinematicTools, "Enables HattiWatti\'s Cinematic Tools.\n\nOn some systems, Cinematic Tools may fail to inject into Alien: Isolation.\nAs a workaround, you may manually inject the DLL stored at DATA\\MODTOOLS\\REMOTE_ASSETS\\cinematictools\\CT_AlienIsolation.dll using your injector of choice.");
             this.enableCinematicTools.UseVisualStyleBackColor = true;
             this.enableCinematicTools.CheckedChanged += new System.EventHandler(this.enableCinematicTools_CheckedChanged);
             // 
