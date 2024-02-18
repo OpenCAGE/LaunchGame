@@ -251,7 +251,7 @@ namespace LaunchGame
             try
             {
                 Thread.Sleep(2500);
-                Process alienProcess = processes[0];
+                Process alienProcess = processes.FirstOrDefault(o => o.MainWindowTitle.ToLower().Contains("alien") && o.MainWindowTitle.ToLower().Contains("isolation"));
                 IntPtr Size = (IntPtr)cinematicToolDLL.Length;
                 IntPtr DllSpace = VirtualAllocEx(alienProcess.Handle, IntPtr.Zero, Size, AllocationType.Reserve | AllocationType.Commit, MemoryProtection.ExecuteReadWrite);
                 byte[] bytes = System.Text.Encoding.ASCII.GetBytes(cinematicToolDLL);
