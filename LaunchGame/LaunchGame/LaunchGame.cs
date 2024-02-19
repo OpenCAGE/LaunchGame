@@ -138,6 +138,8 @@ namespace LaunchGame
 				// It does prevent an exception, though.
 				while (!shouldClose)
 					Thread.Sleep(2500);
+
+                this.Close();
             }
             else
             {
