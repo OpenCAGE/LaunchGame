@@ -248,20 +248,35 @@ namespace LaunchGame
             return assembly.GetManifestResourceStream(resourcePath);
         }
 
+        Process getAlienProcess()
+        {
+			Process[] processes = Process.GetProcessesByName("AI");
+
+            // We use a try-catch block here to catch whenever there's no Alien: Isolation process,
+            // since Enumerable.First() throws an exception when none of the elements in the list match the predicate.
+            //
+            // Is there another way of doing this w/o upgrading the C# version?
+			try
+			{
+				return processes.First(o => o.MainWindowTitle.ToLower().Contains("alien") && o.MainWindowTitle.ToLower().Contains("isolation"));
+			}
+			catch (InvalidOperationException)
+			{
+				return null;
+			}
+			//return processes.FirstOrDefault(o => o.MainWindowTitle.ToLower().Contains("alien") && o.MainWindowTitle.ToLower().Contains("isolation"));
+		}
+
         /* Inject the cinematic tools */
         private void InjectCinematicTools(LaunchGame mainInst)
         {
-            Process[] processes = null;
-            while (processes == null || processes.Length == 0)
-            {
+            while (getAlienProcess() == null)
                 Thread.Sleep(2500);
-                processes = Process.GetProcessesByName("AI");
-            }
 
             try
             {
                 Thread.Sleep(2500);
-                Process alienProcess = processes.FirstOrDefault(o => o.MainWindowTitle.ToLower().Contains("alien") && o.MainWindowTitle.ToLower().Contains("isolation"));
+                Process alienProcess = getAlienProcess();
                 IntPtr Size = (IntPtr)cinematicToolDLL.Length;
                 IntPtr DllSpace = VirtualAllocEx(alienProcess.Handle, IntPtr.Zero, Size, AllocationType.Reserve | AllocationType.Commit, MemoryProtection.ExecuteReadWrite);
                 byte[] bytes = System.Text.Encoding.ASCII.GetBytes(cinematicToolDLL);
