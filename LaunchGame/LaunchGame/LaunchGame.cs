@@ -133,15 +133,23 @@ namespace LaunchGame
                 if (cinematicToolInjectTask != null) cinematicToolInjectTask.Dispose();
                 cinematicToolInjectTask = Task.Factory.StartNew(() => InjectCinematicTools(this));
                 this.Visible = false;
+
+				// This code does mean that if CinematicTools finishes injecting right at the start of this cycle, the window will remain open for 2.5 seconds.
+				// It does prevent an exception, though.
+				while (!shouldClose)
+					Thread.Sleep(2500);
             }
             else
             {
                 this.Close();
             }
         }
+
+        private bool shouldClose = false;
+
         public void OnInjectComplete(bool success)
         {
-            this.Close();
+            shouldClose = true;
         }
 
         /* Enable/disable the Cinematic Tools */
