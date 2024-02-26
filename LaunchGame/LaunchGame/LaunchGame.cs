@@ -81,7 +81,8 @@ namespace LaunchGame
         {
             bool patchLaunch = PatchManager.PatchLaunchMode(MapName);
             bool patchIntegrity = PatchManager.PatchFileIntegrityCheck();
-            if (!patchLaunch || !patchIntegrity)
+            bool patchMsg = PatchManager.PatchPopupMessage();
+            if (!patchLaunch || !patchIntegrity || !patchMsg)
                 MessageBox.Show("Failed to set level loading values in AI.exe!\nIs the game already open?", "Failed to patch binary.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             PatchManager.UpdateLevelListInPackages();

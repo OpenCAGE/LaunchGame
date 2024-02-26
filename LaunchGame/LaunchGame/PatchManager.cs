@@ -200,6 +200,37 @@ namespace LaunchGame
             }
         }
 
+        /* Patch the game binary to remove the seemingly debug "TEXT_" prefix for PopupMessage texts */
+        public static bool PatchPopupMessage()
+        {
+            try
+            {
+                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
+                switch (SettingsManager.GetString("META_GameVersion"))
+                {
+                    case "STEAM":
+                        writer.BaseStream.Position = 14687164;
+                        break;
+                    case "EPIC_GAMES_STORE":
+                        writer.BaseStream.Position = 14783204;
+                        break;
+                    case "GOG":
+                        writer.BaseStream.Position = 14784108;
+                        break;
+                }
+
+                //%s, replacing TEXT_%s
+                writer.Write(new byte[] { 0x25, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                writer.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("PatchManager::PatchPopupMessage - " + e.ToString());
+                return false;
+            }
+        }
+
         /* Patch the game binary to allow us to launch directly to a map */
         public static bool PatchLaunchMode(string MapName = "Frontend")
         {
