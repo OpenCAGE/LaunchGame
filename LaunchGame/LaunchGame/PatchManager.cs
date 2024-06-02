@@ -47,13 +47,14 @@ namespace LaunchGame
             }
             try
             {
-                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
-                for (int i = 0; i < hashPatches.Count; i++)
+                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe")))
                 {
-                    writer.BaseStream.Position = hashPatches[i].offset;
-                    writer.Write(hashPatches[i].patched);
+                    for (int i = 0; i < hashPatches.Count; i++)
+                    {
+                        writer.BaseStream.Position = hashPatches[i].offset;
+                        writer.Write(hashPatches[i].patched);
+                    }
                 }
-                writer.Close();
                 return true;
             }
             catch (Exception e)
@@ -81,14 +82,15 @@ namespace LaunchGame
             }
             try
             {
-                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
-                for (int i = 0; i < noUIPatches.Count; i++)
+                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe")))
                 {
-                    writer.BaseStream.Position = noUIPatches[i].offset;
-                    if (noUI) writer.Write(noUIPatches[i].patched);
-                    else writer.Write(noUIPatches[i].original);
+                    for (int i = 0; i < noUIPatches.Count; i++)
+                    {
+                        writer.BaseStream.Position = noUIPatches[i].offset;
+                        if (noUI) writer.Write(noUIPatches[i].patched);
+                        else writer.Write(noUIPatches[i].original);
+                    }
                 }
-                writer.Close();
                 return true;
             }
             catch (Exception e)
@@ -119,14 +121,15 @@ namespace LaunchGame
             }
             try
             {
-                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
-                for (int i = 0; i < skipFEPatches.Count; i++)
+                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe")))
                 {
-                    writer.BaseStream.Position = skipFEPatches[i].offset;
-                    if (skipFrontend) writer.Write(skipFEPatches[i].patched);
-                    else writer.Write(skipFEPatches[i].original);
+                    for (int i = 0; i < skipFEPatches.Count; i++)
+                    {
+                        writer.BaseStream.Position = skipFEPatches[i].offset;
+                        if (skipFrontend) writer.Write(skipFEPatches[i].patched);
+                        else writer.Write(skipFEPatches[i].original);
+                    }
                 }
-                writer.Close();
                 return true;
             }
             catch (Exception e)
@@ -154,14 +157,15 @@ namespace LaunchGame
             }
             try
             {
-                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
-                for (int i = 0; i < memReplayPatches.Count; i++)
+                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe")))
                 {
-                    writer.BaseStream.Position = memReplayPatches[i].offset;
-                    if (shouldLog) writer.Write(memReplayPatches[i].patched);
-                    else writer.Write(memReplayPatches[i].original);
+                    for (int i = 0; i < memReplayPatches.Count; i++)
+                    {
+                        writer.BaseStream.Position = memReplayPatches[i].offset;
+                        if (shouldLog) writer.Write(memReplayPatches[i].patched);
+                        else writer.Write(memReplayPatches[i].original);
+                    }
                 }
-                writer.Close();
                 return true;
             }
             catch (Exception e)
@@ -176,21 +180,22 @@ namespace LaunchGame
         {
             try
             {
-                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
-                switch (SettingsManager.GetString("META_GameVersion"))
+                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe")))
                 {
-                    case "STEAM":
-                        writer.BaseStream.Position = 4430526;
-                        break;
-                    case "EPIC_GAMES_STORE":
-                        writer.BaseStream.Position = 4500590;
-                        break;
-                    case "GOG":
-                        writer.BaseStream.Position = 4431006;
-                        break;
+                    switch (SettingsManager.GetString("META_GameVersion"))
+                    {
+                        case "STEAM":
+                            writer.BaseStream.Position = 4430526;
+                            break;
+                        case "EPIC_GAMES_STORE":
+                            writer.BaseStream.Position = 4500590;
+                            break;
+                        case "GOG":
+                            writer.BaseStream.Position = 4431006;
+                            break;
+                    }
+                    writer.Write((shouldShow) ? (byte)0x01 : (byte)0x00);
                 }
-                writer.Write((shouldShow) ? (byte)0x01 : (byte)0x00);
-                writer.Close();
                 return true;
             }
             catch (Exception e)
@@ -205,23 +210,24 @@ namespace LaunchGame
         {
             try
             {
-                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
-                switch (SettingsManager.GetString("META_GameVersion"))
+                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe")))
                 {
-                    case "STEAM":
-                        writer.BaseStream.Position = 14687164;
-                        break;
-                    case "EPIC_GAMES_STORE":
-                        writer.BaseStream.Position = 14783204;
-                        break;
-                    case "GOG":
-                        writer.BaseStream.Position = 14784108;
-                        break;
-                }
+                    switch (SettingsManager.GetString("META_GameVersion"))
+                    {
+                        case "STEAM":
+                            writer.BaseStream.Position = 14687164;
+                            break;
+                        case "EPIC_GAMES_STORE":
+                            writer.BaseStream.Position = 14783204;
+                            break;
+                        case "GOG":
+                            writer.BaseStream.Position = 14784108;
+                            break;
+                    }
 
-                //%s, replacing TEXT_%s
-                writer.Write(new byte[] { 0x25, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00 });
-                writer.Close();
+                    //%s, replacing TEXT_%s
+                    writer.Write(new byte[] { 0x25, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                }
                 return true;
             }
             catch (Exception e)
@@ -282,28 +288,29 @@ namespace LaunchGame
             //Edit game EXE with selected option & hack out the benchmark mode
             try
             {
-                BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe"));
-                for (int i = 0; i < benchmarkPatches.Count; i++)
+                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe")))
                 {
-                    writer.BaseStream.Position = benchmarkPatches[i].offset;
-                    if (shouldPatch) writer.Write(benchmarkPatches[i].patched);
-                    else writer.Write(benchmarkPatches[i].original);
+                    for (int i = 0; i < benchmarkPatches.Count; i++)
+                    {
+                        writer.BaseStream.Position = benchmarkPatches[i].offset;
+                        if (shouldPatch) writer.Write(benchmarkPatches[i].patched);
+                        else writer.Write(benchmarkPatches[i].original);
+                    }
+                    switch (SettingsManager.GetString("META_GameVersion"))
+                    {
+                        case "STEAM":
+                            writer.BaseStream.Position = 15676275;
+                            break;
+                        case "EPIC_GAMES_STORE":
+                            writer.BaseStream.Position = 15773411;
+                            break;
+                        case "GOG":
+                            writer.BaseStream.Position = 15773451;
+                            break;
+                    }
+                    if (writer.BaseStream.Position != 0)
+                        writer.Write(mapStringByteArray);
                 }
-                switch (SettingsManager.GetString("META_GameVersion"))
-                {
-                    case "STEAM":
-                        writer.BaseStream.Position = 15676275;
-                        break;
-                    case "EPIC_GAMES_STORE":
-                        writer.BaseStream.Position = 15773411;
-                        break;
-                    case "GOG":
-                        writer.BaseStream.Position = 15773451;
-                        break;
-                }
-                if (writer.BaseStream.Position != 0)
-                    writer.Write(mapStringByteArray);
-                writer.Close();
                 return true;
             }
             catch (Exception e)
