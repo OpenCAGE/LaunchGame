@@ -119,7 +119,7 @@ namespace LaunchGame
                 try
                 {
                     if (File.Exists(rtUtilASI)) File.Delete(rtUtilASI);
-                    if (File.Exists(rtUtilDLL)) File.Delete(rtUtilDLL);
+                    //if (File.Exists(rtUtilDLL)) File.Delete(rtUtilDLL);
                 }
                 catch { }
             }
