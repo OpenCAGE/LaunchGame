@@ -88,10 +88,17 @@ namespace LaunchGame
             PatchManager.UpdateLevelListInPackages();
 
             //Start game process 
-            ProcessStartInfo alienProcess = new ProcessStartInfo();
-            alienProcess.WorkingDirectory = SettingsManager.GetString("PATH_GameRoot");
-            alienProcess.FileName = SettingsManager.GetString("PATH_GameRoot") + "/AI.exe";
-            Process.Start(alienProcess);
+            if (SettingsManager.GetString("META_GameVersion") == "STEAM")
+            {
+                Process.Start("steam://rungameid/214490");
+            }
+            else
+            {
+                ProcessStartInfo alienProcess = new ProcessStartInfo();
+                alienProcess.WorkingDirectory = SettingsManager.GetString("PATH_GameRoot");
+                alienProcess.FileName = SettingsManager.GetString("PATH_GameRoot") + "/AI.exe";
+                Process.Start(alienProcess);
+            }
         }
 
         /* Load game from GUI map selection */
