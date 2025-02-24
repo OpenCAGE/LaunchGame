@@ -60,7 +60,8 @@ namespace LaunchGame
             UIMOD_MapSelection.Checked = SettingsManager.GetBool("UIOPT_NEWFRONTENDMENU");
             UIMOD_ReturnFrontend.Checked = SettingsManager.GetBool("UIOPT_GAMEOVERMENU");
 
-            if (SettingsManager.GetString("OPT_LoadToMap") == "") SettingsManager.SetString("OPT_LoadToMap", "Frontend");
+            if (SettingsManager.GetString("OPT_LoadToMap") == "") 
+                SettingsManager.SetString("OPT_LoadToMap", "Frontend");
 
             levelList.Items.AddRange(Level.GetLevels(SettingsManager.GetString("PATH_GameRoot")).ToArray());
             levelList.SelectedItem = SettingsManager.GetString("OPT_LoadToMap");
@@ -77,8 +78,14 @@ namespace LaunchGame
         }
 
         /* Load game with given map name */
-        private void LaunchToMap(string MapName)
+        private bool LaunchToMap(string MapName)
         {
+            if (MapName.Length > 32)
+            {
+                MessageBox.Show("The name of the selected level is too long!\nPlease rename it.", "Level name too long.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
             bool patchLaunch = PatchManager.PatchLaunchMode(MapName);
             bool patchIntegrity = PatchManager.PatchFileIntegrityCheck();
             bool patchMsg = PatchManager.PatchPopupMessage();
@@ -99,6 +106,7 @@ namespace LaunchGame
                 alienProcess.FileName = SettingsManager.GetString("PATH_GameRoot") + "/AI.exe";
                 Process.Start(alienProcess);
             }
+            return true;
         }
 
         /* Load game from GUI map selection */
@@ -132,8 +140,8 @@ namespace LaunchGame
             }
 
             //Work out what option was selected and launch to it
-            SettingsManager.SetString("OPT_LoadToMap", levelList.Items[levelList.SelectedIndex].ToString());
-            LaunchToMap(levelList.Items[levelList.SelectedIndex].ToString());
+            if (!LaunchToMap(levelList.Items[levelList.SelectedIndex].ToString()))
+                return;
 
             //Enable Cinematic Tools if requested
             if (SettingsManager.GetBool("OPT_CinematicTools"))
@@ -150,6 +158,12 @@ namespace LaunchGame
         public void OnInjectComplete(bool success)
         {
             this.Close();
+        }
+
+        /* Remember selected level */
+        private void levelList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SettingsManager.SetString("OPT_LoadToMap", levelList.Items[levelList.SelectedIndex].ToString());
         }
 
         /* Enable/disable the Cinematic Tools */

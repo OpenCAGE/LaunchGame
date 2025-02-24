@@ -1,4 +1,4 @@
-﻿namespace LaunchGame
+namespace LaunchGame
 {
     partial class LaunchGame
     {
@@ -160,6 +160,7 @@
             this.levelList.Name = "levelList";
             this.levelList.Size = new System.Drawing.Size(350, 21);
             this.levelList.TabIndex = 30;
+            this.levelList.SelectedIndexChanged += new System.EventHandler(this.levelList_SelectedIndexChanged);
             // 
             // groupBox1
             // 
