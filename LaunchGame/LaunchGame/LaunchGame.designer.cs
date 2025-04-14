@@ -36,6 +36,8 @@ namespace LaunchGame
             this.enableCinematicTools = new System.Windows.Forms.CheckBox();
             this.enableUIPerf = new System.Windows.Forms.CheckBox();
             this.enableMemReplayLogs = new System.Windows.Forms.CheckBox();
+            this.disableUI = new System.Windows.Forms.CheckBox();
+            this.skipFrontend = new System.Windows.Forms.CheckBox();
             this.UIMOD_DebugCheckpoints = new System.Windows.Forms.CheckBox();
             this.UIMOD_MapSelection = new System.Windows.Forms.CheckBox();
             this.UIMOD_MapName = new System.Windows.Forms.CheckBox();
@@ -43,15 +45,14 @@ namespace LaunchGame
             this.levelList = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.disableUI = new System.Windows.Forms.CheckBox();
-            this.skipFrontend = new System.Windows.Forms.CheckBox();
+            this.patchCurrentGen = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // OpenGame
             // 
             this.OpenGame.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OpenGame.Location = new System.Drawing.Point(12, 209);
+            this.OpenGame.Location = new System.Drawing.Point(15, 230);
             this.OpenGame.Name = "OpenGame";
             this.OpenGame.Size = new System.Drawing.Size(350, 44);
             this.OpenGame.TabIndex = 22;
@@ -107,6 +108,33 @@ namespace LaunchGame
             this.toolTip1.SetToolTip(this.enableMemReplayLogs, "Enables memory replay logs, saved to the Mem_Replay_Logs folder.");
             this.enableMemReplayLogs.UseVisualStyleBackColor = true;
             this.enableMemReplayLogs.CheckedChanged += new System.EventHandler(this.enableMemReplayLogs_CheckedChanged);
+            // 
+            // disableUI
+            // 
+            this.disableUI.AutoSize = true;
+            this.disableUI.Enabled = false;
+            this.disableUI.Location = new System.Drawing.Point(191, 114);
+            this.disableUI.Name = "disableUI";
+            this.disableUI.Size = new System.Drawing.Size(54, 17);
+            this.disableUI.TabIndex = 31;
+            this.disableUI.Text = "No UI";
+            this.toolTip1.SetToolTip(this.disableUI, "Enabling this will disable the in-game HUD. Be aware that this also disables UI p" +
+        "opups, so may make some actions impossible.");
+            this.disableUI.UseVisualStyleBackColor = true;
+            this.disableUI.CheckedChanged += new System.EventHandler(this.disableUI_CheckedChanged);
+            // 
+            // skipFrontend
+            // 
+            this.skipFrontend.AutoSize = true;
+            this.skipFrontend.Enabled = false;
+            this.skipFrontend.Location = new System.Drawing.Point(11, 114);
+            this.skipFrontend.Name = "skipFrontend";
+            this.skipFrontend.Size = new System.Drawing.Size(92, 17);
+            this.skipFrontend.TabIndex = 32;
+            this.skipFrontend.Text = "Skip Frontend";
+            this.toolTip1.SetToolTip(this.skipFrontend, "Enabling this will skip the title screen when loading directly to a level.");
+            this.skipFrontend.UseVisualStyleBackColor = true;
+            this.skipFrontend.CheckedChanged += new System.EventHandler(this.skipFrontend_CheckedChanged);
             // 
             // UIMOD_DebugCheckpoints
             // 
@@ -164,6 +192,7 @@ namespace LaunchGame
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.patchCurrentGen);
             this.groupBox1.Controls.Add(this.skipFrontend);
             this.groupBox1.Controls.Add(this.disableUI);
             this.groupBox1.Controls.Add(this.enableRuntimeUtils);
@@ -176,7 +205,7 @@ namespace LaunchGame
             this.groupBox1.Controls.Add(this.enableCinematicTools);
             this.groupBox1.Location = new System.Drawing.Point(12, 61);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(350, 142);
+            this.groupBox1.Size = new System.Drawing.Size(350, 163);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Launch Options";
@@ -190,38 +219,25 @@ namespace LaunchGame
             this.label1.TabIndex = 32;
             this.label1.Text = "Starting Level";
             // 
-            // disableUI
+            // patchCurrentGen
             // 
-            this.disableUI.AutoSize = true;
-            this.disableUI.Enabled = false;
-            this.disableUI.Location = new System.Drawing.Point(191, 114);
-            this.disableUI.Name = "disableUI";
-            this.disableUI.Size = new System.Drawing.Size(54, 17);
-            this.disableUI.TabIndex = 31;
-            this.disableUI.Text = "No UI";
-            this.toolTip1.SetToolTip(this.disableUI, "Enabling this will disable the in-game HUD. Be aware that this also disables UI p" +
-        "opups, so may make some actions impossible.");
-            this.disableUI.UseVisualStyleBackColor = true;
-            this.disableUI.CheckedChanged += new System.EventHandler(this.disableUI_CheckedChanged);
-            // 
-            // skipFrontend
-            // 
-            this.skipFrontend.AutoSize = true;
-            this.skipFrontend.Enabled = false;
-            this.skipFrontend.Location = new System.Drawing.Point(11, 114);
-            this.skipFrontend.Name = "skipFrontend";
-            this.skipFrontend.Size = new System.Drawing.Size(92, 17);
-            this.skipFrontend.TabIndex = 32;
-            this.skipFrontend.Text = "Skip Frontend";
-            this.toolTip1.SetToolTip(this.skipFrontend, "Enabling this will skip the title screen when loading directly to a level.");
-            this.skipFrontend.UseVisualStyleBackColor = true;
-            this.skipFrontend.CheckedChanged += new System.EventHandler(this.skipFrontend_CheckedChanged);
+            this.patchCurrentGen.AutoSize = true;
+            this.patchCurrentGen.Enabled = false;
+            this.patchCurrentGen.Location = new System.Drawing.Point(11, 137);
+            this.patchCurrentGen.Name = "patchCurrentGen";
+            this.patchCurrentGen.Size = new System.Drawing.Size(179, 17);
+            this.patchCurrentGen.TabIndex = 33;
+            this.patchCurrentGen.Text = "Patch Current-Gen Optimisations";
+            this.toolTip1.SetToolTip(this.patchCurrentGen, "Enabling this will patch current-gen script optimisations to enable functionality" +
+        " previously disabled in the PC build, such as additional dynamic lighting.");
+            this.patchCurrentGen.UseVisualStyleBackColor = true;
+            this.patchCurrentGen.CheckedChanged += new System.EventHandler(this.patchCurrentGen_CheckedChanged);
             // 
             // LaunchGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 262);
+            this.ClientSize = new System.Drawing.Size(374, 288);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.levelList);
@@ -255,5 +271,6 @@ namespace LaunchGame
         private System.Windows.Forms.CheckBox enableRuntimeUtils;
         private System.Windows.Forms.CheckBox disableUI;
         private System.Windows.Forms.CheckBox skipFrontend;
+        private System.Windows.Forms.CheckBox patchCurrentGen;
     }
 }

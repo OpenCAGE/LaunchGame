@@ -175,6 +175,42 @@ namespace LaunchGame
             }
         }
 
+        /* Patch the instruction to make requires_script_for_current_gen always return true in game binary */
+        public static bool DisableCurrentGenOptimisations(bool shouldLog)
+        {
+            List<PatchBytes> memReplayPatches = new List<PatchBytes>();
+            switch (SettingsManager.GetString("META_GameVersion"))
+            {
+                case "STEAM":
+                    memReplayPatches.Add(new PatchBytes(5074902, new byte[] { 0xb6, 0x89, 0xd5, 0xff }, new byte[] { 0x16, 0xf5, 0x5c, 0x00 }));
+                    break;
+                case "EPIC_GAMES_STORE":
+                    memReplayPatches.Add(new PatchBytes(6156998, new byte[] { 0x36, 0x0c, 0xc6 }, new byte[] { 0x16, 0x1a, 0xd1 }));
+                    break;
+                case "GOG":
+                    memReplayPatches.Add(new PatchBytes(5074918, new byte[] { 0xb6, 0x8c, 0xd5 }, new byte[] { 0x76, 0x5d, 0xf8 }));
+                    break;
+            }
+            try
+            {
+                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(SettingsManager.GetString("PATH_GameRoot") + "/AI.exe")))
+                {
+                    for (int i = 0; i < memReplayPatches.Count; i++)
+                    {
+                        writer.BaseStream.Position = memReplayPatches[i].offset;
+                        if (shouldLog) writer.Write(memReplayPatches[i].patched);
+                        else writer.Write(memReplayPatches[i].original);
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("PatchManager::DisableCurrentGenOptimisations - " + e.ToString());
+                return false;
+            }
+        }
+
         /* Patch the cUI UI perf stats flag in the game binary */
         public static bool PatchUIPerfFlag(bool shouldShow)
         {

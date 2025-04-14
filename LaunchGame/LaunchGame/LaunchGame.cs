@@ -55,6 +55,9 @@ namespace LaunchGame
             enableMemReplayLogs.Checked = SettingsManager.GetBool("OPT_Mem_Replay_Logs");
             enableMemReplayLogs.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
 
+            patchCurrentGen.Checked = SettingsManager.GetBool("OPT_PatchCurrentGen");
+            patchCurrentGen.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+
             UIMOD_DebugCheckpoints.Checked = SettingsManager.GetBool("UIOPT_PAUSEMENU");
             UIMOD_MapName.Checked = SettingsManager.GetBool("UIOPT_LOADINGSCREEN");
             UIMOD_MapSelection.Checked = SettingsManager.GetBool("UIOPT_NEWFRONTENDMENU");
@@ -208,6 +211,14 @@ namespace LaunchGame
             SettingsManager.SetBool("OPT_SkipFE", skipFrontend.Checked);
             if (!PatchManager.PatchSkipFrontendFlag(skipFrontend.Checked))
                 MessageBox.Show("Failed to set skip frontend option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        /* Current-gen script optimiser patch */
+        private void patchCurrentGen_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingsManager.SetBool("OPT_PatchCurrentGen", patchCurrentGen.Checked);
+            if (!PatchManager.DisableCurrentGenOptimisations(patchCurrentGen.Checked))
+                MessageBox.Show("Failed to set optimisation patch option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /* UI Modifications */
