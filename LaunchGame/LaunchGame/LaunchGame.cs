@@ -19,8 +19,11 @@ namespace LaunchGame
 {
     public partial class LaunchGame : Form
     {
-        string cinematicToolDLL = "";
-        string utilPath = "";
+        string _cinematicToolDLL = "";
+        string _utilPath = "";
+
+        PatchManager.Platform _platform;
+        string _gamePath;
 
         /* On init, if we are trying to launch to a map, skip GUI */
         public LaunchGame(string level = null, string launchDirectly = null)
@@ -34,29 +37,62 @@ namespace LaunchGame
 
             InitializeComponent();
 
-            cinematicToolDLL = SettingsManager.GetString("PATH_GameRoot") + "/DATA/MODTOOLS/REMOTE_ASSETS/cinematictools/CT_AlienIsolation.dll";
-            utilPath = SettingsManager.GetString("PATH_GameRoot") + "/DATA/MODTOOLS/REMOTE_ASSETS/runtimeutils";
+            //Get the game version
+            switch (OpenCAGE.SettingsManager.GetString("META_GameVersion"))
+            {
+                case "STEAM":
+                    _platform = PatchManager.Platform.STEAM;
+                    break;
+                case "EPIC_GAMES_STORE":
+                    _platform = PatchManager.Platform.EPIC_GAMES_STORE;
+                    break;
+                case "GOG":
+                    _platform = PatchManager.Platform.GOG;
+                    break;
+                default:
+                    MessageBox.Show("Your game version is unsupported!", "Unsupported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                    return;
+            }
+            _gamePath = SettingsManager.GetString("PATH_GameRoot");
+
+            //Close the game down before we do anything
+            List<Process> allProcesses = new List<Process>(Process.GetProcessesByName("AI"));
+            for (int x = 0; x < allProcesses.Count; x++)
+            {
+                try
+                {
+                    allProcesses[x].Kill();
+                    allProcesses[x].WaitForExit();
+                }
+                catch { }
+            }
+
+            PatchManager.PerformRecommendedPatches(_platform, _gamePath);
+
+            _cinematicToolDLL = _gamePath + "/DATA/MODTOOLS/REMOTE_ASSETS/cinematictools/CT_AlienIsolation.dll";
+            _utilPath = _gamePath + "/DATA/MODTOOLS/REMOTE_ASSETS/runtimeutils";
 
             enableCinematicTools.Checked = SettingsManager.GetBool("OPT_CinematicTools");
-            enableCinematicTools.Enabled = SettingsManager.GetString("META_GameVersion") == "STEAM" && File.Exists(cinematicToolDLL);
+            enableCinematicTools.Enabled = _platform == PatchManager.Platform.STEAM && File.Exists(_cinematicToolDLL);
 
             enableRuntimeUtils.Checked = SettingsManager.GetBool("OPT_Runtime_Utils");
-            enableRuntimeUtils.Enabled = SettingsManager.GetString("META_GameVersion") == "STEAM" && Directory.Exists(utilPath);
+            enableRuntimeUtils.Enabled = _platform == PatchManager.Platform.STEAM && Directory.Exists(_utilPath);
 
             disableUI.Checked = SettingsManager.GetBool("OPT_HudDisabled");
-            disableUI.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+            disableUI.Enabled = _platform != PatchManager.Platform.WINDOWS_STORE;
 
             skipFrontend.Checked = SettingsManager.GetBool("OPT_SkipFE");
-            skipFrontend.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+            skipFrontend.Enabled = _platform != PatchManager.Platform.WINDOWS_STORE;
 
             enableUIPerf.Checked = SettingsManager.GetBool("OPT_cUIEnabled_UIPerf");
-            enableUIPerf.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+            enableUIPerf.Enabled = _platform != PatchManager.Platform.WINDOWS_STORE;
 
             enableMemReplayLogs.Checked = SettingsManager.GetBool("OPT_Mem_Replay_Logs");
-            enableMemReplayLogs.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+            enableMemReplayLogs.Enabled = _platform != PatchManager.Platform.WINDOWS_STORE;
 
             patchCurrentGen.Checked = SettingsManager.GetBool("OPT_PatchCurrentGen");
-            patchCurrentGen.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+            patchCurrentGen.Enabled = _platform != PatchManager.Platform.WINDOWS_STORE;
 
             UIMOD_DebugCheckpoints.Checked = SettingsManager.GetBool("UIOPT_PAUSEMENU");
             UIMOD_MapName.Checked = SettingsManager.GetBool("UIOPT_LOADINGSCREEN");
@@ -66,7 +102,7 @@ namespace LaunchGame
             if (SettingsManager.GetString("OPT_LoadToMap") == "") 
                 SettingsManager.SetString("OPT_LoadToMap", "Frontend");
 
-            levelList.Items.AddRange(Level.GetLevels(SettingsManager.GetString("PATH_GameRoot")).ToArray());
+            levelList.Items.AddRange(Level.GetLevels(_gamePath).ToArray());
             levelList.SelectedItem = SettingsManager.GetString("OPT_LoadToMap");
             if (levelList.SelectedIndex == -1)
             {
@@ -77,7 +113,7 @@ namespace LaunchGame
             {
                 levelList.SelectedItem = level;
             }
-            levelList.Enabled = SettingsManager.GetString("META_GameVersion") != "WINDOWS_STORE";
+            levelList.Enabled = _platform != PatchManager.Platform.WINDOWS_STORE;
         }
 
         /* Load game with given map name */
@@ -89,24 +125,24 @@ namespace LaunchGame
                 return false;
             }
 
-            bool patchLaunch = PatchManager.PatchLaunchMode(MapName);
-            bool patchIntegrity = PatchManager.PatchFileIntegrityCheck();
-            bool patchMsg = PatchManager.PatchPopupMessage();
+            bool patchLaunch = PatchManager.PatchLaunchMode(_platform, _gamePath, MapName);
+            bool patchIntegrity = PatchManager.PatchFileIntegrityCheck(_platform, _gamePath);
+            bool patchMsg = PatchManager.PatchPopupMessage(_platform, _gamePath);
             if (!patchLaunch || !patchIntegrity || !patchMsg)
                 MessageBox.Show("Failed to set level loading values in AI.exe!\nIs the game already open?", "Failed to patch binary.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            PatchManager.UpdateLevelListInPackages();
+            PatchManager.UpdateLevelListInPackages(_platform, _gamePath);
 
             //Start game process 
-            if (SettingsManager.GetString("META_GameVersion") == "STEAM")
+            if (_platform == PatchManager.Platform.STEAM)
             {
                 Process.Start("steam://rungameid/214490");
             }
             else
             {
                 ProcessStartInfo alienProcess = new ProcessStartInfo();
-                alienProcess.WorkingDirectory = SettingsManager.GetString("PATH_GameRoot");
-                alienProcess.FileName = SettingsManager.GetString("PATH_GameRoot") + "/AI.exe";
+                alienProcess.WorkingDirectory = _gamePath;
+                alienProcess.FileName = _gamePath + "/AI.exe";
                 Process.Start(alienProcess);
             }
             return true;
@@ -117,14 +153,14 @@ namespace LaunchGame
         private void LaunchGame_Click(object sender, EventArgs e)
         {
             //Copy/delete runtime utils as requested
-            string rtUtilASI = SettingsManager.GetString("PATH_GameRoot") + "OpenCAGE_Utils.asi";
-            string rtUtilDLL = SettingsManager.GetString("PATH_GameRoot") + "d3d11.dll";
+            string rtUtilASI = _gamePath + "OpenCAGE_Utils.asi";
+            string rtUtilDLL = _gamePath + "d3d11.dll";
             if (SettingsManager.GetBool("OPT_Runtime_Utils"))
             {
                 try
                 {
-                    File.Copy(utilPath + "/OpenCAGE_Utils.asi", rtUtilASI, true);
-                    File.Copy(utilPath + "/winmm.dll", rtUtilDLL, true);
+                    File.Copy(_utilPath + "/OpenCAGE_Utils.asi", rtUtilASI, true);
+                    File.Copy(_utilPath + "/winmm.dll", rtUtilDLL, true);
                 }
                 catch
                 {
@@ -179,7 +215,7 @@ namespace LaunchGame
         private void enableUIPerf_CheckedChanged(object sender, EventArgs e)
         {
             SettingsManager.SetBool("OPT_cUIEnabled_UIPerf", enableUIPerf.Checked);
-            if (!PatchManager.PatchUIPerfFlag(enableUIPerf.Checked))
+            if (!PatchManager.PatchUIPerfFlag(_platform, _gamePath, enableUIPerf.Checked))
                 MessageBox.Show("Failed to set cUI UI perf option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -187,7 +223,7 @@ namespace LaunchGame
         private void enableMemReplayLogs_CheckedChanged(object sender, EventArgs e)
         {
             SettingsManager.SetBool("OPT_Mem_Replay_Logs", enableMemReplayLogs.Checked);
-            if (!PatchManager.PatchMemReplayLogFlag(enableMemReplayLogs.Checked))
+            if (!PatchManager.PatchMemReplayLogFlag(_platform, _gamePath, enableMemReplayLogs.Checked))
                 MessageBox.Show("Failed to set memory logging option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -201,7 +237,7 @@ namespace LaunchGame
         private void disableUI_CheckedChanged(object sender, EventArgs e)
         {
             SettingsManager.SetBool("OPT_HudDisabled", disableUI.Checked);
-            if (!PatchManager.PatchNoUIFlag(disableUI.Checked))
+            if (!PatchManager.PatchNoUIFlag(_platform, _gamePath, disableUI.Checked))
                 MessageBox.Show("Failed to set HUD disabled option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -209,7 +245,7 @@ namespace LaunchGame
         private void skipFrontend_CheckedChanged(object sender, EventArgs e)
         {
             SettingsManager.SetBool("OPT_SkipFE", skipFrontend.Checked);
-            if (!PatchManager.PatchSkipFrontendFlag(skipFrontend.Checked))
+            if (!PatchManager.PatchSkipFrontendFlag(_platform, _gamePath, skipFrontend.Checked))
                 MessageBox.Show("Failed to set skip frontend option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -217,7 +253,7 @@ namespace LaunchGame
         private void patchCurrentGen_CheckedChanged(object sender, EventArgs e)
         {
             SettingsManager.SetBool("OPT_PatchCurrentGen", patchCurrentGen.Checked);
-            if (!PatchManager.DisableCurrentGenOptimisations(patchCurrentGen.Checked))
+            if (!PatchManager.DisableCurrentGenOptimisations(_platform, _gamePath, patchCurrentGen.Checked))
                 MessageBox.Show("Failed to set optimisation patch option.\nIs Alien: Isolation open?", "Couldn't write!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -242,7 +278,7 @@ namespace LaunchGame
         private void UpdateUI(string file, bool modded)
         {
             if (AlienPAK == null)
-                AlienPAK = new PAK2(SettingsManager.GetString("PATH_GameRoot") + "/DATA/UI.PAK");
+                AlienPAK = new PAK2(_gamePath + "/DATA/UI.PAK");
 
             using (MemoryStream stream = new MemoryStream())
             using (BinaryReader reader = new BinaryReader(stream))
@@ -285,9 +321,9 @@ namespace LaunchGame
             {
                 Thread.Sleep(2500);
                 Process alienProcess = processes.FirstOrDefault(o => o.MainWindowTitle.ToLower().Contains("alien") && o.MainWindowTitle.ToLower().Contains("isolation"));
-                IntPtr Size = (IntPtr)cinematicToolDLL.Length;
+                IntPtr Size = (IntPtr)_cinematicToolDLL.Length;
                 IntPtr DllSpace = VirtualAllocEx(alienProcess.Handle, IntPtr.Zero, Size, AllocationType.Reserve | AllocationType.Commit, MemoryProtection.ExecuteReadWrite);
-                byte[] bytes = System.Text.Encoding.ASCII.GetBytes(cinematicToolDLL);
+                byte[] bytes = System.Text.Encoding.ASCII.GetBytes(_cinematicToolDLL);
                 bool DllWrite = WriteProcessMemory(alienProcess.Handle, DllSpace, bytes, (int)bytes.Length, out var bytesread);
                 IntPtr Kernel32Handle = GetModuleHandle("Kernel32.dll");
                 IntPtr LoadLibraryAAddress = GetProcAddress(Kernel32Handle, "LoadLibraryA");
